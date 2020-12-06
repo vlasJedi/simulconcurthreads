@@ -1,4 +1,4 @@
-package main.java.com.concur;
+package main.java.com.concur.threadsynced;
 
 @FunctionalInterface
 public interface ThreadWorkFace {
