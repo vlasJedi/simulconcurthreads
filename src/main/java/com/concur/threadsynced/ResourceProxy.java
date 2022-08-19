@@ -14,6 +14,7 @@ public class ResourceProxy {
             final long beforeMutexTime = System.nanoTime() / 1000;
             if (i == 0) System.out.println("Initial iteration: thread creation time took around: "
                     + (beforeMutexTime - creationTime));
+            // this is lock by object reference so any java Object has this
             synchronized (shared) {
                 System.out.println("*****");
                 logAccessExecutionTime(beforeMutexTime);

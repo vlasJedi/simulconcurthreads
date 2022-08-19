@@ -1,5 +1,7 @@
 package main.java.com.concur.consumerproducersimple;
 
+import static java.lang.Short.valueOf;
+
 public class Producer implements Runnable {
     private final SharedStorage shared;
     private short lastValue;
@@ -24,7 +26,7 @@ public class Producer implements Runnable {
                     waitOn(shared);
                 }
                 System.out.println("Producer awoke, going to put value");
-                shared.put((new Short(++lastValue)).toString());
+                shared.put((valueOf(++lastValue)).toString());
                 System.out.println("Producer put value is: " + lastValue);
                 // if consumer in waiting state then awake it
                 shared.notify();
