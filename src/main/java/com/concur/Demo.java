@@ -1,5 +1,6 @@
 package main.java.com.concur;
 
+import main.java.com.concur.compfutures.CompletableFutures;
 import main.java.com.concur.consumerproducersimple.Consumer;
 import main.java.com.concur.consumerproducersimple.Producer;
 import main.java.com.concur.consumerproducersimple.SharedStorage;
@@ -22,7 +23,7 @@ class Demo {
         // Starvation - thread just can't obtain process time due to other greedy threads
         // Livelock - after lock is released several threads start compete for resource
 
-        System.out.println("Main thread started");
+        // System.out.println("Main thread started");
 
 
         // thread synced case
@@ -50,49 +51,59 @@ class Demo {
 //        new Thread(producer).start();
 //        new Thread(consumer).start();
 
-        long start = System.currentTimeMillis();
-        int numberOfThreads = 16;
-        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        // Fixed thread pool with Executors Future
+//        long start = System.currentTimeMillis();
+//        int numberOfThreads = 16;
+//        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+//
+//        int numberOfTasks = 16;
+//        int counterInit = 0;
+//        SharedResource res = new SharedResource();
+//
+//        List<Future<Integer>> futures = new ArrayList<>();
+//
+//        for (int i = 0; i < numberOfTasks; i++) {
+//            // variables in closure for lambdas should be final or kind of final - read only
+//            int j = i;
+//            futures.add(executor.submit(() -> {
+//                synchronized (res) {
+//                    System.out.println("Before increment is called and now is: " + res.getCounter());
+//                    res.increment();
+//                    System.out.println("Increment was called and now is: " + res.getCounter());
+//                }
+//                return j;
+//                // System.out.println("Current thread: " + Thread.currentThread() + " start took: " + (System.currentTimeMillis() - start));
+//            }));
+//        }
+//        boolean isTimeout = false;
+//        try {
+//            isTimeout = executor.awaitTermination(10000, TimeUnit.MILLISECONDS);
+//        } catch (InterruptedException e) {
+//            System.out.println("Main was interrupted");
+//        } finally {
+//            executor.shutdown();
+//            futures.forEach((future) -> {
+//                try {
+//                    System.out.println("Thread number finished: " + future.get());
+//                } catch (Exception e) {
+//                    System.out.println("Some thread and its future is broken");
+//                }
+//            });
+//            System.out.println("Final counter is: " + res.getCounter());
+//            System.out.println("Pool finished with timeout ? - " + isTimeout);
+//        }
+//
+//
+//        System.out.println("Main thread finished");
 
-        int numberOfTasks = 16;
-        int counterInit = 0;
-        SharedResource res = new SharedResource();
+        CompletableFutures futures = new CompletableFutures();
+        futures.run();
 
-        List<Future<Integer>> futures = new ArrayList<>();
-
-        for (int i = 0; i < numberOfTasks; i++) {
-            // variables in closure for lambdas should be final or kind of final - read only
-            int j = i;
-            futures.add(executor.submit(() -> {
-                synchronized (res) {
-                    System.out.println("Before increment is called and now is: " + res.getCounter());
-                    res.increment();
-                    System.out.println("Increment was called and now is: " + res.getCounter());
-                }
-                return j;
-                // System.out.println("Current thread: " + Thread.currentThread() + " start took: " + (System.currentTimeMillis() - start));
-            }));
-        }
-        boolean isTimeout = false;
         try {
-            isTimeout = executor.awaitTermination(10000, TimeUnit.MILLISECONDS);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
-            System.out.println("Main was interrupted");
-        } finally {
-            executor.shutdown();
-            futures.forEach((future) -> {
-                try {
-                    System.out.println("Thread number finished: " + future.get());
-                } catch (Exception e) {
-                    System.out.println("Some thread and its future is broken");
-                }
-            });
-            System.out.println("Final counter is: " + res.getCounter());
-            System.out.println("Pool finished with timeout ? - " + isTimeout);
+
         }
-
-
-        System.out.println("Main thread finished");
     }
 
 }

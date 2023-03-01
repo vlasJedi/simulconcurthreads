@@ -21,6 +21,7 @@ public class Consumer implements Runnable{
                     waitOn(shared);
                 }
                 System.out.println("Consumer awoke");
+                // simulate that consumer takes time to read a value
                 callSleep();
                 System.out.println("Consumer consumes the: " + shared.get());
                 shared.notify();
